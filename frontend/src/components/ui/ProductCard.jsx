@@ -2,8 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ShoppingCart } from 'lucide-react';
+import { useCart } from '../../context/CartContext';
 
 const ProductCard = ({ product }) => {
+  const { addToCart } = useCart();
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -19,7 +21,7 @@ const ProductCard = ({ product }) => {
           loading="lazy"
         />
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
-        <button className="absolute bottom-4 right-4 bg-white p-3 rounded-full shadow-lg opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-black hover:text-white">
+        <button onClick={() => addToCart(product)} className="absolute bottom-4 right-4 bg-white p-3 rounded-full shadow-lg opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-black hover:text-white">
           <ShoppingCart size={20} />
         </button>
       </div>

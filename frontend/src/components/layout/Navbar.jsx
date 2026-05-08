@@ -1,17 +1,20 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ShoppingBag, User, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from '../ui/Logo';
+import { useCart } from '../../context/CartContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { cartCount } = useCart();
 
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Collections', path: '/shop' },
-    { name: 'The Stream', path: '/stream' },
+    { name: 'The Stream', path: '/' },
     { name: 'Support', path: '/contact' },
   ];
 
@@ -39,9 +42,11 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center space-x-6">
-            <button className="p-2 hover:bg-neutral-100 rounded-full transition-colors relative">
+            <button onClick={() => navigate('/checkout')} className="p-2 hover:bg-neutral-100 rounded-full transition-colors relative">
               <ShoppingBag size={20} strokeWidth={1.5} />
-              <span className="absolute top-0 right-0 w-4 h-4 bg-black text-white text-[10px] flex items-center justify-center rounded-full">0</span>
+              {cartCount > 0 && (
+                <span className="absolute top-0 right-0 w-4 h-4 bg-black text-white text-[10px] flex items-center justify-center rounded-full">{cartCount}</span>
+              )}
             </button>
             <Link to="/login" className="p-2 hover:bg-neutral-100 rounded-full transition-colors">
               <User size={20} strokeWidth={1.5} />
@@ -50,9 +55,11 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-4">
-             <button className="p-2 relative">
+             <button onClick={() => navigate('/checkout')} className="p-2 relative">
               <ShoppingBag size={20} />
-              <span className="absolute top-0 right-0 w-4 h-4 bg-black text-white text-[10px] flex items-center justify-center rounded-full">0</span>
+              {cartCount > 0 && (
+                <span className="absolute top-0 right-0 w-4 h-4 bg-black text-white text-[10px] flex items-center justify-center rounded-full">{cartCount}</span>
+              )}
             </button>
             <button onClick={() => setIsOpen(!isOpen)} className="p-2">
               {isOpen ? <X size={24} /> : <Menu size={24} />}

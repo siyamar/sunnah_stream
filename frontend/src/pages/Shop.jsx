@@ -7,20 +7,19 @@ const Shop = () => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
 
-  // Mock data loading
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setProducts([
-        { _id: '1', name: 'Minimalist Watch', price: 299, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800', category: 'Accessories' },
-        { _id: '2', name: 'Leather Tote', price: 180, image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=800', category: 'Bags' },
-        { _id: '3', name: 'Oversized Blazer', price: 240, image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&q=80&w=800', category: 'Apparel' },
-        { _id: '4', name: 'Canvas Sneakers', price: 120, image: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&q=80&w=800', category: 'Footwear' },
-        { _id: '5', name: 'Ceramic Vase', price: 85, image: 'https://images.unsplash.com/photo-1578500484748-482c361e5741?auto=format&fit=crop&q=80&w=800', category: 'Decor' },
-        { _id: '6', name: 'Wireless Headphones', price: 350, image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800', category: 'Electronics' },
-      ]);
-      setLoading(false);
-    }, 1500);
-    return () => clearTimeout(timer);
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/products');
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
   }, []);
 
   return (

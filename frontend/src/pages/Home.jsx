@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import Button from '../components/ui/Button';
 import ProductCard from '../components/ui/ProductCard';
 import bannerImg from '../assets/banner.png';
@@ -34,6 +35,16 @@ const Typewriter = ({ text, delay }) => {
         transition={{ duration: 0.5, repeat: Infinity, ease: "linear" }}
         className="inline-block w-1 h-12 md:h-16 bg-white ml-1 align-middle"
       />
+    </span>
+  );
+};
+
+const LoadingDots = () => {
+  return (
+    <span className="inline-flex tracking-widest ml-1">
+      <motion.span animate={{ opacity: [0, 1, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 0 }}>.</motion.span>
+      <motion.span animate={{ opacity: [0, 1, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}>.</motion.span>
+      <motion.span animate={{ opacity: [0, 1, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}>.</motion.span>
     </span>
   );
 };
@@ -89,21 +100,25 @@ const Hero = () => {
             transition={{ duration: 1 }}
           >
             <h1 className="text-6xl md:text-8xl font-bold tracking-tighter text-white mb-6">
-              <Typewriter text="SUNNAH" delay={120} /> <br />
+              SUNNAH <br />
               <span className="text-brand-teal">
-                <Typewriter text="STREAM" delay={120} />
+                STREAM<LoadingDots />
               </span>
             </h1>
             <p className="text-xl text-white/70 mb-10 max-w-lg leading-relaxed font-light italic">
               "Sustainable Solutions for Modern Tradition."
             </p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
-              <Button className="bg-brand-teal hover:bg-brand-teal/90 text-white px-12 py-5 text-lg rounded-full">
-                Discover Quality
-              </Button>
-              <Button variant="ghost" className="text-white hover:bg-white/10 px-12 py-5 text-lg rounded-full border border-white/20 backdrop-blur-sm">
-                Contact Us
-              </Button>
+              <Link to="/shop">
+                <Button className="bg-brand-teal hover:bg-brand-teal/90 text-white px-12 py-5 text-lg rounded-full w-full">
+                  Discover Quality
+                </Button>
+              </Link>
+              <a href="mailto:support@sunnahstream.com">
+                <Button variant="ghost" className="text-white hover:bg-white/10 px-12 py-5 text-lg rounded-full border border-white/20 backdrop-blur-sm w-full">
+                  Contact Us
+                </Button>
+              </a>
             </div>
           </motion.div>
         </div>
@@ -145,12 +160,23 @@ const Hero = () => {
 };
 
 const Home = () => {
-  const featuredProducts = [
-    { _id: '1', name: 'Minimalist Watch', price: 299, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800', category: 'Accessories' },
-    { _id: '2', name: 'Leather Tote', price: 180, image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=800', category: 'Bags' },
-    { _id: '3', name: 'Oversized Blazer', price: 240, image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&q=80&w=800', category: 'Apparel' },
-    { _id: '4', name: 'Canvas Sneakers', price: 120, image: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&q=80&w=800', category: 'Footwear' },
-  ];
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/products');
+        const data = await response.json();
+        setFeaturedProducts(data.filter(p => p.isFeatured).slice(0, 4));
+      } catch (error) {
+        console.error('Error fetching featured products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   return (
     <motion.div
@@ -171,7 +197,9 @@ const Home = () => {
               <h2 className="text-3xl font-bold tracking-tight mb-4">Featured Selection</h2>
               <p className="text-neutral-500">Hand-picked essentials for your collection.</p>
             </div>
-            <Button variant="ghost" className="hidden md:block">View All Products</Button>
+            <Link to="/shop">
+              <Button variant="ghost" className="hidden md:block">View All Products</Button>
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
