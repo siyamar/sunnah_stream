@@ -1,0 +1,52 @@
+[
+  {
+    "_id": "645a1b2c3d4e5f6a7b8c9d01",
+    "name": "Minimalist Watch",
+    "description": "A masterpiece of minimalist design, this watch features a clean dial and a premium leather strap.",
+    "price": 299,
+    "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800",
+    "category": "Accessories",
+    "stock": 15,
+    "isFeatured": true
+  },
+  {
+    "_id": "645a1b2c3d4e5f6a7b8c9d02",
+    "name": "Leather Tote",
+    "description": "Handcrafted from genuine Italian leather, this tote is the perfect companion for your daily essentials.",
+    "price": 180,
+    "image": "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=800",
+    "category": "Bags",
+    "stock": 8,
+    "isFeatured": true
+  },
+  {
+    "_id": "645a1b2c3d4e5f6a7b8c9d03",
+    "name": "Oversized Blazer",
+    "description": "A modern take on a classic silhouette. Made from sustainable wool blend.",
+    "price": 240,
+    "image": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&q=80&w=800",
+    "category": "Apparel",
+    "stock": 20,
+    "isFeatured": true
+  },
+  {
+    "_id": "645a1b2c3d4e5f6a7b8c9d04",
+    "name": "Canvas Sneakers",
+    "description": "Timeless comfort for the urban explorer.",
+    "price": 120,
+    "image": "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&q=80&w=800",
+    "category": "Footwear",
+    "stock": 50,
+    "isFeatured": true
+  },
+  {
+    "_id": "645a1b2c3d4e5f6a7b8c9d05",
+    "name": "Ceramic Vase",
+    "description": "Organic shapes for the modern home.",
+    "price": 85,
+    "image": "https://images.unsplash.com/photo-1578500484748-482c361e5741?auto=format&fit=crop&q=80&w=800",
+    "category": "Decor",
+    "stock": 12,
+    "isFeatured": false
+  }
+]

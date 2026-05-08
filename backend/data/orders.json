@@ -1,0 +1,37 @@
+[
+  {
+    "_id": "645a1b2c3d4e5f6a7b8c9e01",
+    "user": { "name": "John Doe", "email": "john@example.com" },
+    "items": [
+      { "product": "645a1b2c3d4e5f6a7b8c9d01", "quantity": 1, "price": 299 },
+      { "product": "645a1b2c3d4e5f6a7b8c9d02", "quantity": 1, "price": 180 }
+    ],
+    "totalAmount": 479,
+    "status": "Shipped",
+    "shippingAddress": {
+      "street": "123 Luxe Ave",
+      "city": "New York",
+      "state": "NY",
+      "zip": "10001",
+      "country": "USA"
+    },
+    "createdAt": "2026-05-01T10:00:00Z"
+  },
+  {
+    "_id": "645a1b2c3d4e5f6a7b8c9e02",
+    "user": { "name": "Jane Smith", "email": "jane@example.com" },
+    "items": [
+      { "product": "645a1b2c3d4e5f6a7b8c9d04", "quantity": 2, "price": 120 }
+    ],
+    "totalAmount": 240,
+    "status": "Pending",
+    "shippingAddress": {
+      "street": "456 Minimalist Rd",
+      "city": "London",
+      "state": "LDN",
+      "zip": "EC1A 1BB",
+      "country": "UK"
+    },
+    "createdAt": "2026-05-05T14:30:00Z"
+  }
+]
