@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ProductCard from '../components/ui/ProductCard';
 import Skeleton from '../components/ui/Skeleton';
+import { API_BASE_URL } from '../config';
 
 const Shop = () => {
   const [loading, setLoading] = useState(true);
@@ -10,7 +11,7 @@ const Shop = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/products');
+        const response = await fetch(`${API_BASE_URL}/api/products`);
         const data = await response.json();
         setProducts(data);
       } catch (error) {

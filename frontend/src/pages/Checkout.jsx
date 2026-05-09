@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import Button from '../components/ui/Button';
+import { API_BASE_URL } from '../config';
 
 const Checkout = () => {
   const { cartItems, cartTotal, clearCart, removeFromCart, updateQuantity } = useCart();
@@ -37,7 +38,7 @@ const Checkout = () => {
         price: item.product.price
       }));
 
-      const response = await fetch('http://localhost:5000/api/orders', {
+      const response = await fetch(`${API_BASE_URL}/api/orders`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

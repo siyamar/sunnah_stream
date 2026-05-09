@@ -4,6 +4,7 @@ import { LayoutDashboard, ShoppingCart, Users, Plus, Loader } from 'lucide-react
 import { useNavigate } from 'react-router-dom';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import Button from '../components/ui/Button';
+import { API_BASE_URL } from '../config';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
@@ -24,7 +25,7 @@ const AdminDashboard = () => {
           return;
         }
 
-        const res = await fetch('http://localhost:5000/api/orders', {
+        const res = await fetch(`${API_BASE_URL}/api/orders`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
