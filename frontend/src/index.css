@@ -57,3 +57,12 @@
 ::-webkit-scrollbar-thumb {
   @apply bg-neutral-200 rounded-full hover:bg-neutral-300 transition-colors;
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

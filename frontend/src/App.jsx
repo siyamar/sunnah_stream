@@ -14,6 +14,7 @@ const Register = lazy(() => import('./pages/Register'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const Checkout = lazy(() => import('./pages/Checkout'));
+const TrackOrder = lazy(() => import('./pages/TrackOrder'));
 
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -40,6 +41,7 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/checkout" element={<Checkout />} />
+                <Route path="/track-order" element={<TrackOrder />} />
               </Routes>
             </AnimatePresence>
           </Suspense>

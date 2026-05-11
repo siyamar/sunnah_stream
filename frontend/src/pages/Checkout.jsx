@@ -9,15 +9,14 @@ const Checkout = () => {
   const { cartItems, cartTotal, clearCart, removeFromCart, updateQuantity } = useCart();
   const navigate = useNavigate();
   const [shipping, setShipping] = useState({
-    street: '',
-    city: '',
-    state: '',
-    zip: '',
-    country: ''
+    customerName: '',
+    phoneNumber: '',
+    address: '',
+    details: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
+  const [orderData, setOrderData] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,12 +25,7 @@ const Checkout = () => {
 
     try {
       const token = localStorage.getItem('token');
-      if (!token) {
-        navigate('/login');
-        return;
-      }
-
-      // Format items for backend: { product: id, quantity, price }
+      
       const itemsForBackend = cartItems.map(item => ({
         product: item.product._id,
         quantity: item.quantity,
@@ -42,12 +36,12 @@ const Checkout = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          ...(token && { Authorization: `Bearer ${token}` })
         },
         body: JSON.stringify({
           items: itemsForBackend,
           totalAmount: cartTotal,
-          shippingAddress: shipping
+          ...shipping
         })
       });
 
@@ -55,7 +49,7 @@ const Checkout = () => {
 
       if (response.ok) {
         clearCart();
-        setSuccess(true);
+        setOrderData(data);
       } else {
         setError(data.message || 'Checkout failed');
       }
@@ -66,12 +60,38 @@ const Checkout = () => {
     }
   };
 
-  if (success) {
+  if (orderData) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center py-24 px-6 text-center">
-        <h1 className="text-4xl font-bold text-brand-teal mb-4">Order Confirmed!</h1>
-        <p className="text-neutral-500 mb-8">Thank you for your purchase. Your order has been placed successfully.</p>
-        <Button onClick={() => navigate('/shop')}>Continue Shopping</Button>
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-white rounded-3xl p-10 max-w-md w-full text-center shadow-2xl"
+        >
+          <div className="w-20 h-20 bg-brand-teal/10 rounded-full flex items-center justify-center mx-auto mb-8 text-brand-teal text-4xl">
+            ✓
+          </div>
+          <h1 className="text-3xl font-bold mb-4 text-neutral-900">Order Successful!</h1>
+          <p className="text-neutral-500 mb-8 leading-relaxed">
+            Thank you for your purchase. Please save your order number for tracking:
+          </p>
+          <div className="bg-neutral-50 border-2 border-dashed border-neutral-200 rounded-2xl p-6 mb-8">
+            <span className="text-xs font-bold uppercase tracking-widest text-neutral-400 block mb-2">Order Number</span>
+            <span className="text-2xl font-mono font-bold text-black">{orderData.orderNumber}</span>
+          </div>
+          <p className="text-sm text-neutral-400 mb-10 italic">
+            "Please Remember this order number for order tracking."
+          </p>
+          <div className="space-y-4">
+            <Button onClick={() => navigate('/shop')} className="w-full">Continue Shopping</Button>
+            <button 
+              onClick={() => navigate('/track-order')} 
+              className="text-sm font-bold text-neutral-400 hover:text-black transition-colors"
+            >
+              Track Order Status
+            </button>
+          </div>
+        </motion.div>
       </div>
     );
   }
@@ -83,100 +103,116 @@ const Checkout = () => {
       exit={{ opacity: 0 }}
       className="max-w-7xl mx-auto px-6 lg:px-12 py-24"
     >
-      <h1 className="text-4xl font-bold tracking-tight mb-12">Checkout</h1>
+      <div className="flex justify-between items-center mb-12">
+        <h1 className="text-4xl font-bold tracking-tight">Checkout</h1>
+        <button onClick={() => navigate('/')} className="text-neutral-400 hover:text-black transition-colors">← Back Home</button>
+      </div>
 
       {cartItems.length === 0 ? (
-        <div className="text-center py-12 bg-neutral-50 rounded-2xl">
-          <p className="text-neutral-500 mb-6">Your cart is empty.</p>
-          <Button onClick={() => navigate('/shop')}>Browse Products</Button>
+        <div className="text-center py-24 bg-neutral-50 rounded-[40px] border border-dashed border-neutral-200">
+          <div className="text-6xl mb-6">🛒</div>
+          <p className="text-neutral-500 mb-8 text-lg">Your cart is empty.</p>
+          <Button onClick={() => navigate('/')} className="px-12 py-4">Browse Products</Button>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Order Summary */}
-          <div className="card-premium p-8 h-fit">
-            <h2 className="text-xl font-bold mb-6">Order Summary</h2>
-            <div className="space-y-6 mb-8">
+          <div className="card-premium p-10 h-fit">
+            <h2 className="text-2xl font-bold mb-8">Order Summary</h2>
+            <div className="space-y-8 mb-10">
               {cartItems.map((item) => (
-                <div key={item.product._id} className="flex justify-between items-center border-b border-neutral-100 pb-4">
-                  <div className="flex items-center space-x-4">
-                    <img src={item.product.image} alt={item.product.name} className="w-16 h-16 object-cover rounded-xl" />
+                <div key={item.product._id} className="flex justify-between items-center group">
+                  <div className="flex items-center space-x-6">
+                    <div className="relative overflow-hidden rounded-2xl w-24 h-24 bg-neutral-50">
+                      <img src={item.product.image} alt={item.product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    </div>
                     <div>
-                      <p className="font-bold text-sm">{item.product.name}</p>
-                      <p className="text-neutral-500 text-xs">${item.product.price} x {item.quantity}</p>
-                      <div className="flex items-center mt-2 space-x-2">
-                        <button onClick={() => updateQuantity(item.product._id, item.quantity - 1)} className="w-6 h-6 bg-neutral-100 rounded-full flex items-center justify-center text-xs hover:bg-neutral-200">-</button>
-                        <span className="text-xs font-bold">{item.quantity}</span>
-                        <button onClick={() => updateQuantity(item.product._id, item.quantity + 1)} className="w-6 h-6 bg-neutral-100 rounded-full flex items-center justify-center text-xs hover:bg-neutral-200">+</button>
-                        <button onClick={() => removeFromCart(item.product._id)} className="text-red-500 text-xs ml-4 hover:underline">Remove</button>
+                      <p className="font-bold text-base mb-1">{item.product.name}</p>
+                      <p className="text-neutral-400 text-sm font-medium mb-3">Unit: ${item.product.price}</p>
+                      <div className="flex items-center space-x-4">
+                        <div className="flex items-center bg-neutral-100 rounded-full px-4 py-1">
+                          <button onClick={() => updateQuantity(item.product._id, item.quantity - 1)} className="text-lg font-medium hover:text-brand-teal transition-colors">-</button>
+                          <span className="mx-4 text-sm font-bold w-4 text-center">{item.quantity}</span>
+                          <button onClick={() => updateQuantity(item.product._id, item.quantity + 1)} className="text-lg font-medium hover:text-brand-teal transition-colors">+</button>
+                        </div>
+                        <button onClick={() => removeFromCart(item.product._id)} className="text-neutral-300 hover:text-red-500 transition-colors text-xs font-bold uppercase tracking-widest">Remove</button>
                       </div>
                     </div>
                   </div>
-                  <p className="font-bold">${(item.product.price * item.quantity).toFixed(2)}</p>
+                  <p className="font-bold text-lg">${(item.product.price * item.quantity).toFixed(2)}</p>
                 </div>
               ))}
             </div>
-            <div className="flex justify-between items-center text-lg font-bold pt-4">
-              <span>Total</span>
-              <span>${cartTotal.toFixed(2)}</span>
+            
+            <div className="border-t border-neutral-100 pt-8 space-y-4">
+               <div className="flex justify-between text-neutral-400 text-sm">
+                <span>Subtotal</span>
+                <span>${cartTotal.toFixed(2)}</span>
+              </div>
+               <div className="flex justify-between text-neutral-400 text-sm">
+                <span>Shipping</span>
+                <span className="text-green-500 font-bold uppercase tracking-widest text-[10px]">Free</span>
+              </div>
+              <div className="flex justify-between items-center text-2xl font-bold pt-4">
+                <span>Total Amount</span>
+                <span className="text-brand-teal">${cartTotal.toFixed(2)}</span>
+              </div>
             </div>
           </div>
 
           {/* Shipping Form */}
-          <div className="card-premium p-8">
-            <h2 className="text-xl font-bold mb-6">Shipping Details</h2>
-            {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-neutral-400">Street Address</label>
+          <div className="card-premium p-10">
+            <h2 className="text-2xl font-bold mb-8">Shipping Details</h2>
+            {error && <p className="p-4 bg-red-50 text-red-500 rounded-2xl text-sm mb-8 font-medium">⚠️ {error}</p>}
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="space-y-3">
+                <label className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400 ml-1">Full Name</label>
                 <input 
                   required
-                  className="input-premium w-full" 
-                  value={shipping.street}
-                  onChange={e => setShipping({...shipping, street: e.target.value})}
+                  placeholder="Enter your name"
+                  className="input-premium w-full !bg-neutral-50 !rounded-2xl" 
+                  value={shipping.customerName}
+                  onChange={e => setShipping({...shipping, customerName: e.target.value})}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-neutral-400">City</label>
-                  <input 
-                    required
-                    className="input-premium w-full" 
-                    value={shipping.city}
-                    onChange={e => setShipping({...shipping, city: e.target.value})}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-neutral-400">State / Province</label>
-                  <input 
-                    required
-                    className="input-premium w-full" 
-                    value={shipping.state}
-                    onChange={e => setShipping({...shipping, state: e.target.value})}
-                  />
-                </div>
+              
+              <div className="space-y-3">
+                <label className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400 ml-1">Mobile Number</label>
+                <input 
+                  required
+                  type="tel"
+                  placeholder="e.g. +880 1XXX-XXXXXX"
+                  className="input-premium w-full !bg-neutral-50 !rounded-2xl" 
+                  value={shipping.phoneNumber}
+                  onChange={e => setShipping({...shipping, phoneNumber: e.target.value})}
+                />
               </div>
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-neutral-400">ZIP / Postal Code</label>
-                  <input 
-                    required
-                    className="input-premium w-full" 
-                    value={shipping.zip}
-                    onChange={e => setShipping({...shipping, zip: e.target.value})}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-neutral-400">Country</label>
-                  <input 
-                    required
-                    className="input-premium w-full" 
-                    value={shipping.country}
-                    onChange={e => setShipping({...shipping, country: e.target.value})}
-                  />
-                </div>
+
+              <div className="space-y-3">
+                <label className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400 ml-1">Full Address</label>
+                <textarea 
+                  required
+                  rows="3"
+                  placeholder="Street name, house number, area..."
+                  className="input-premium w-full !bg-neutral-50 !rounded-2xl resize-none py-4" 
+                  value={shipping.address}
+                  onChange={e => setShipping({...shipping, address: e.target.value})}
+                />
               </div>
-              <Button type="submit" className="w-full py-4 mt-8 rounded-2xl" disabled={loading}>
-                {loading ? 'Processing...' : `Pay $${cartTotal.toFixed(2)}`}
+
+              <div className="space-y-3">
+                <label className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400 ml-1">Additional Details (Optional)</label>
+                <textarea 
+                  rows="2"
+                  placeholder="Notes for delivery person, building name, etc."
+                  className="input-premium w-full !bg-neutral-50 !rounded-2xl resize-none py-4" 
+                  value={shipping.details}
+                  onChange={e => setShipping({...shipping, details: e.target.value})}
+                />
+              </div>
+
+              <Button type="submit" className="w-full py-6 mt-10 rounded-[20px] text-lg font-bold shadow-xl shadow-brand-teal/20" disabled={loading}>
+                {loading ? 'Processing Order...' : `Order Now • $${cartTotal.toFixed(2)}`}
               </Button>
             </form>
           </div>

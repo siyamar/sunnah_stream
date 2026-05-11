@@ -11,33 +11,54 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { cartCount } = useCart();
 
+  const scrollToSection = (id) => {
+    if (location.pathname !== '/') {
+      navigate('/', { state: { scrollTo: id } });
+    } else {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    setIsOpen(false);
+  };
+
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Collections', path: '/shop' },
-    { name: 'The Stream', path: '/' },
-    { name: 'Support', path: '/contact' },
+    { name: 'Home', id: 'hero' },
+    { name: 'Collections', id: 'collections' },
+    { name: 'The Stream', id: 'about' },
+    { name: 'Track Order', path: '/track-order' },
+    { name: 'Support', id: 'support' },
   ];
 
   return (
     <nav className="sticky top-0 z-50 glass">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="flex justify-between items-center h-20">
-          <Link to="/">
+          <Link to="/" onClick={() => scrollToSection('hero')}>
             <Logo />
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center space-x-12">
+          <div className="hidden md:flex items-center space-x-8 lg:space-x-12">
             {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                className={`text-sm font-medium transition-colors hover:text-black ${
-                  location.pathname === link.path ? 'text-black' : 'text-neutral-500'
-                }`}
-              >
-                {link.name}
-              </Link>
+              link.path ? (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className="text-sm font-medium transition-colors hover:text-black text-neutral-500"
+                >
+                  {link.name}
+                </Link>
+              ) : (
+                <button
+                  key={link.name}
+                  onClick={() => scrollToSection(link.id)}
+                  className="text-sm font-medium transition-colors hover:text-black text-neutral-500"
+                >
+                  {link.name}
+                </button>
+              )
             ))}
           </div>
 
@@ -79,14 +100,24 @@ const Navbar = () => {
           >
             <div className="flex flex-col space-y-6">
               {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  onClick={() => setIsOpen(false)}
-                  className="text-lg font-medium text-neutral-600"
-                >
-                  {link.name}
-                </Link>
+                link.path ? (
+                  <Link
+                    key={link.name}
+                    to={link.path}
+                    onClick={() => setIsOpen(false)}
+                    className="text-left text-lg font-medium text-neutral-600"
+                  >
+                    {link.name}
+                  </Link>
+                ) : (
+                  <button
+                    key={link.name}
+                    onClick={() => scrollToSection(link.id)}
+                    className="text-left text-lg font-medium text-neutral-600"
+                  >
+                    {link.name}
+                  </button>
+                )
               ))}
               <hr className="border-neutral-100" />
               <Link to="/login" onClick={() => setIsOpen(false)} className="text-lg font-medium text-neutral-600">

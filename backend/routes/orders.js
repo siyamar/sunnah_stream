@@ -3,21 +3,59 @@ const router = express.Router();
 const Order = require('../models/Order');
 const { protect, admin } = require('../middleware/auth');
 const { loadMockData } = require('../utils/mockLoader');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
-// Create new order
-router.post('/', protect, async (req, res) => {
-    if (process.env.USE_MOCK_DATA === 'true') {
-        return res.status(201).json({ message: 'Order created (Mock Mode)', orderId: 'MOCK-123' });
+// Helper to optionally get user from token
+const getOptionalUser = async (req) => {
+    let token;
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        try {
+            token = req.headers.authorization.split(' ')[1];
+            const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret123');
+            return await User.findById(decoded.id).select('-password');
+        } catch (error) {
+            return null;
+        }
     }
-    const { items, totalAmount, shippingAddress } = req.body;
+    return null;
+};
+
+// Create new order (Guest or Logged in)
+router.post('/', async (req, res) => {
+    const { items, totalAmount, customerName, phoneNumber, address, details } = req.body;
+    
     try {
+        const user = await getOptionalUser(req);
+        const orderNumber = 'SS-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        
         const order = await Order.create({
-            user: req.user._id,
+            user: user ? user._id : null,
+            orderNumber,
+            customerName,
+            phoneNumber,
+            address,
+            details,
             items,
-            totalAmount,
-            shippingAddress
+            totalAmount
         });
         res.status(201).json(order);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Track order by number (Public)
+router.get('/track/:orderNumber', async (req, res) => {
+    try {
+        const order = await Order.findOne({ orderNumber: req.params.orderNumber.toUpperCase() })
+            .populate('items.product', 'name price image');
+        
+        if (order) {
+            res.json(order);
+        } else {
+            res.status(404).json({ message: 'Order not found' });
+        }
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
