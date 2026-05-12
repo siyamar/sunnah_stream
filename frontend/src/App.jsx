@@ -21,6 +21,9 @@ const AdminProductForm = lazy(() => import('./components/admin/AdminProductForm'
 const AdminPlaceholder = lazy(() => import('./pages/AdminPlaceholder'));
 const Checkout = lazy(() => import('./pages/Checkout'));
 const TrackOrder = lazy(() => import('./pages/TrackOrder'));
+const AdminInventory = lazy(() => import('./pages/AdminInventory'));
+const AdminReports = lazy(() => import('./pages/AdminReports'));
+const AdminReportDetail = lazy(() => import('./pages/AdminReportDetail'));
 
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -55,12 +58,14 @@ function App() {
                   <Route index element={<AdminDashboard />} />
                   <Route path="orders" element={<AdminOrders />} />
                   <Route path="products" element={<AdminProducts />} />
+                  <Route path="inventory" element={<AdminInventory />} />
                   <Route path="add-product" element={<AdminProductForm mode="add" />} />
                   <Route path="edit-products" element={<AdminProducts />} /> {/* Point to list for selection */}
                   <Route path="edit-product/:id" element={<AdminProductForm mode="edit" />} />
                   <Route path="promotions" element={<AdminPlaceholder title="Promotional Products" />} />
                   <Route path="banners" element={<AdminPlaceholder title="Banner Management" />} />
-                  <Route path="reports" element={<AdminPlaceholder title="Business Reports" />} />
+                  <Route path="reports" element={<AdminReports />} />
+                  <Route path="reports/:category" element={<AdminReportDetail />} />
                 </Route>
               </Routes>
             </AnimatePresence>

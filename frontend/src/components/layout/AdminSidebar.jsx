@@ -25,6 +25,7 @@ const AdminSidebar = () => {
     { name: 'Home', path: '/admin', icon: <LayoutDashboard size={20} /> },
     { name: 'Orders', path: '/admin/orders', icon: <ShoppingCart size={20} /> },
     { name: 'Products', path: '/admin/products', icon: <Package size={20} /> },
+    { name: 'Inventory', path: '/admin/inventory', icon: <PlusCircle size={20} /> },
     { name: 'Add Products', path: '/admin/add-product', icon: <PlusCircle size={20} /> },
     { name: 'Edit Products', path: '/admin/edit-products', icon: <Edit size={20} /> },
     { name: 'Promotional Product', path: '/admin/promotions', icon: <Star size={20} /> },
