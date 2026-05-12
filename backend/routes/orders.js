@@ -5,6 +5,7 @@ const { protect, admin } = require('../middleware/auth');
 const { loadMockData } = require('../utils/mockLoader');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const Product = require('../models/Product');
 
 // Helper to optionally get user from token
 const getOptionalUser = async (req) => {
@@ -49,7 +50,11 @@ router.post('/', async (req, res) => {
 router.get('/track/:orderNumber', async (req, res) => {
     try {
         const order = await Order.findOne({ orderNumber: req.params.orderNumber.toUpperCase() })
-            .populate('items.product', 'name price image');
+            .populate({
+                path: 'items.product',
+                model: 'Product',
+                select: 'name price image'
+            });
         
         if (order) {
             res.json(order);
@@ -80,7 +85,15 @@ router.get('/', protect, admin, async (req, res) => {
         return res.json(loadMockData('orders'));
     }
     try {
-        const orders = await Order.find({}).populate('user', 'name email').sort({ createdAt: -1 });
+        const orders = await Order.find({})
+            .populate('user', 'name email')
+            .populate({
+                path: 'items.product',
+                model: 'Product',
+                select: 'name price image'
+            })
+            .sort({ createdAt: -1 })
+            .exec();
         res.json(orders);
     } catch (error) {
         res.status(500).json({ message: error.message });
