@@ -348,10 +348,10 @@ const Home = () => {
             {[
               { 
                 title: 'Customer Support', 
-                desc: 'Questions about an order or a product? Our team is here to help you 24/7.', 
+                desc: 'Call: 01882799557, 01862192937. Reach out via phone or email.', 
                 icon: '✉️',
                 action: 'Email Us',
-                link: 'mailto:support@sunnahstream.com'
+                link: 'mailto:sunnahstreamst@gmail.com'
               },
               { 
                 title: 'Shipping & Returns', 

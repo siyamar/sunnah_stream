@@ -43,6 +43,8 @@ const Footer = () => {
             <h4 className="text-sm font-semibold mb-6 uppercase tracking-widest">Support</h4>
             <ul className="space-y-4 text-sm text-neutral-500">
               <li><button onClick={() => scrollToSection('support')} className="hover:text-black transition-colors">Contact Us</button></li>
+              <li><a href="tel:01882799557" className="hover:text-black transition-colors">01882799557</a>, <a href="tel:01862192937" className="hover:text-black transition-colors">01862192937</a></li>
+              <li><a href="mailto:sunnahstreamst@gmail.com" className="hover:text-black transition-colors">sunnahstreamst@gmail.com</a></li>
               <li><button onClick={() => scrollToSection('support')} className="hover:text-black transition-colors">Shipping Policy</button></li>
               <li><button onClick={() => scrollToSection('support')} className="hover:text-black transition-colors">Returns & Exchanges</button></li>
             </ul>

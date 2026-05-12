@@ -101,20 +101,21 @@ const AdminDashboard = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="max-w-7xl mx-auto px-6 lg:px-12 py-24"
+      className="space-y-12"
     >
-      <div className="flex justify-between items-center mb-16">
+      <div className="flex justify-between items-end">
         <div>
           <h1 className="text-4xl font-bold tracking-tight mb-2">Management Console</h1>
           <p className="text-neutral-500">Overview of your business performance.</p>
         </div>
-        <Button className="flex items-center space-x-2">
+        <Button onClick={() => navigate('/admin/add-product')} className="flex items-center space-x-2">
           <Plus size={18} />
           <span>Add Product</span>
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {[
           { label: 'Total Revenue', value: `$${metrics.revenue.toLocaleString()}`, icon: <ShoppingCart className="text-blue-500" /> },
           { label: 'Total Orders', value: metrics.totalOrders, icon: <LayoutDashboard className="text-purple-500" /> },
@@ -130,7 +131,7 @@ const AdminDashboard = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 card-premium p-8">
           <h2 className="font-bold mb-6">Revenue Overview</h2>
           <div className="h-80 w-full">
@@ -183,7 +184,12 @@ const AdminDashboard = () => {
       <div className="card-premium overflow-hidden">
         <div className="p-8 border-b border-neutral-50 flex justify-between items-center">
           <h2 className="font-bold">Recent Orders</h2>
-          <button className="text-sm font-bold text-neutral-400 hover:text-black">View All</button>
+          <button 
+            onClick={() => navigate('/admin/orders')}
+            className="text-sm font-bold text-neutral-400 hover:text-black transition-colors"
+          >
+            View All
+          </button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left">
@@ -191,6 +197,7 @@ const AdminDashboard = () => {
               <tr className="text-xs font-bold uppercase tracking-widest text-neutral-400 border-b border-neutral-50">
                 <th className="px-8 py-6">Order ID</th>
                 <th className="px-8 py-6">Customer</th>
+                <th className="px-8 py-6">Products</th>
                 <th className="px-8 py-6">Status</th>
                 <th className="px-8 py-6 text-right">Total</th>
               </tr>
@@ -198,8 +205,17 @@ const AdminDashboard = () => {
             <tbody>
               {orders.slice(0, 10).map((order) => (
                 <tr key={order._id} className="border-b border-neutral-50 last:border-none hover:bg-neutral-50 transition-colors">
-                  <td className="px-8 py-6 font-bold">#{order._id.substring(order._id.length - 6).toUpperCase()}</td>
-                  <td className="px-8 py-6 text-neutral-600">{order.user?.name || 'Unknown User'}</td>
+                  <td className="px-8 py-6 font-bold">#{order.orderNumber || order._id.substring(order._id.length - 6).toUpperCase()}</td>
+                  <td className="px-8 py-6 text-neutral-600">{order.customerName || order.user?.name || 'Guest'}</td>
+                  <td className="px-8 py-6">
+                    <div className="flex flex-col">
+                      {order.items?.map((item, i) => (
+                        <span key={i} className="text-xs text-neutral-500 truncate w-40">
+                          {item.quantity}x {item.product?.name || 'Product'}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
                   <td className="px-8 py-6">
                     <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
                       order.status === 'Delivered' ? 'bg-green-100 text-green-700' : 
