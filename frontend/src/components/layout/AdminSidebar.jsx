@@ -12,6 +12,7 @@ import {
   ChevronRight,
   User as UserIcon,
   BarChart3,
+  FileText,
   X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -25,6 +26,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
   const menuItems = [
     { name: 'Dashboard', path: '/admin', icon: <LayoutDashboard size={20} /> },
     { name: 'Orders', path: '/admin/orders', icon: <ShoppingCart size={20} /> },
+    { name: 'Invoices', path: '/admin/invoices', icon: <FileText size={20} /> },
     { name: 'Products', path: '/admin/products', icon: <Package size={20} /> },
     { name: 'Inventory', path: '/admin/inventory', icon: <PlusCircle size={20} /> },
     { name: 'Add Products', path: '/admin/add-product', icon: <PlusCircle size={20} /> },

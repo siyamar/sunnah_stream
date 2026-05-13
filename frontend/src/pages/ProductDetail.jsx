@@ -71,7 +71,7 @@ const ProductDetail = () => {
         <motion.div 
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          className="aspect-[4/5] overflow-hidden bg-neutral-100 rounded-3xl sticky top-24"
+          className="aspect-[4/5] overflow-hidden bg-neutral-100 rounded-3xl lg:sticky top-24"
         >
           <img 
             src={product.image} 

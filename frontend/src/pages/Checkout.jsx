@@ -121,25 +121,28 @@ const Checkout = () => {
             <h2 className="text-2xl font-bold mb-8">Order Summary</h2>
             <div className="space-y-8 mb-10">
               {cartItems.map((item) => (
-                <div key={item.product._id} className="flex justify-between items-center group">
-                  <div className="flex items-center space-x-6">
-                    <div className="relative overflow-hidden rounded-2xl w-24 h-24 bg-neutral-50">
+                <div key={item.product._id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center group gap-4">
+                  <div className="flex items-start md:items-center space-x-4 w-full sm:w-auto">
+                    <div className="relative overflow-hidden rounded-2xl w-20 h-20 md:w-24 md:h-24 bg-neutral-50 shrink-0">
                       <img src={item.product.image} alt={item.product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                     </div>
-                    <div>
-                      <p className="font-bold text-base mb-1">{item.product.name}</p>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-base mb-1 truncate pr-2">{item.product.name}</p>
                       <p className="text-neutral-400 text-sm font-medium mb-3">Unit: ${item.product.price}</p>
-                      <div className="flex items-center space-x-4">
-                        <div className="flex items-center bg-neutral-100 rounded-full px-4 py-1">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <div className="flex items-center bg-neutral-100 rounded-full px-3 py-1 shrink-0">
                           <button onClick={() => updateQuantity(item.product._id, item.quantity - 1)} className="text-lg font-medium hover:text-brand-teal transition-colors">-</button>
-                          <span className="mx-4 text-sm font-bold w-4 text-center">{item.quantity}</span>
+                          <span className="mx-2 md:mx-4 text-sm font-bold w-4 text-center">{item.quantity}</span>
                           <button onClick={() => updateQuantity(item.product._id, item.quantity + 1)} className="text-lg font-medium hover:text-brand-teal transition-colors">+</button>
                         </div>
-                        <button onClick={() => removeFromCart(item.product._id)} className="text-neutral-300 hover:text-red-500 transition-colors text-xs font-bold uppercase tracking-widest">Remove</button>
+                        <button onClick={() => removeFromCart(item.product._id)} className="text-neutral-300 hover:text-red-500 transition-colors text-[10px] md:text-xs font-bold uppercase tracking-widest shrink-0">Remove</button>
                       </div>
                     </div>
                   </div>
-                  <p className="font-bold text-lg">${(item.product.price * item.quantity).toFixed(2)}</p>
+                  <div className="w-full sm:w-auto flex justify-between sm:block items-center border-t sm:border-none border-neutral-50 pt-3 sm:pt-0">
+                    <span className="sm:hidden text-sm font-medium text-neutral-400">Total:</span>
+                    <p className="font-bold text-lg">${(item.product.price * item.quantity).toFixed(2)}</p>
+                  </div>
                 </div>
               ))}
             </div>

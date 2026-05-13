@@ -24,6 +24,9 @@ const TrackOrder = lazy(() => import('./pages/TrackOrder'));
 const AdminInventory = lazy(() => import('./pages/AdminInventory'));
 const AdminReports = lazy(() => import('./pages/AdminReports'));
 const AdminReportDetail = lazy(() => import('./pages/AdminReportDetail'));
+const AdminInvoices = lazy(() => import('./pages/AdminInvoices'));
+const AdminInvoiceDetail = lazy(() => import('./pages/AdminInvoiceDetail'));
+const SoftwareShowcase = lazy(() => import('./pages/SoftwareShowcase'));
 
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -61,6 +64,7 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/track-order" element={<TrackOrder />} />
+                <Route path="/showcase" element={<SoftwareShowcase />} />
 
                 {/* Admin Routes */}
                 <Route path="/admin" element={<AdminLayout />}>
@@ -75,6 +79,8 @@ function App() {
                   <Route path="banners" element={<AdminPlaceholder title="Banner Management" />} />
                   <Route path="reports" element={<AdminReports />} />
                   <Route path="reports/:category" element={<AdminReportDetail />} />
+                  <Route path="invoices" element={<AdminInvoices />} />
+                  <Route path="invoices/:id" element={<AdminInvoiceDetail />} />
                 </Route>
               </Routes>
             </AnimatePresence>

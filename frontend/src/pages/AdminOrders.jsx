@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Loader, ShoppingBag, ChevronDown, ChevronUp, Clock, CheckCircle, Truck, Package } from 'lucide-react';
+import { Loader, ShoppingBag, ChevronDown, ChevronUp, Clock, CheckCircle, Truck, Package, FileText } from 'lucide-react';
 import { API_BASE_URL } from '../config';
 import Button from '../components/ui/Button';
 
@@ -202,6 +202,16 @@ const AdminOrders = () => {
                           </button>
                         ))}
                       </div>
+                    </div>
+                    <div className="pt-4">
+                      <h4 className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-6">Documents</h4>
+                      <Button 
+                        onClick={() => navigate(`/admin/invoices/${order._id}`)}
+                        className="w-full flex items-center justify-center space-x-2 bg-neutral-100 text-black hover:bg-black hover:text-white border-none"
+                      >
+                        <FileText size={18} />
+                        <span>View Invoice</span>
+                      </Button>
                     </div>
                   </div>
                 </div>
