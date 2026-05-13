@@ -15,7 +15,7 @@ const Button = ({ className, variant = 'primary', children, ...props }) => {
   return (
     <motion.button
       whileTap={{ scale: 0.98 }}
-      className={cn(variants[variant], className)}
+      className={cn(variants[variant], 'whitespace-nowrap shrink-0', className)}
       {...props}
     >
       {children}

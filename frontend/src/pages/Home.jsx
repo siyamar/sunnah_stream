@@ -257,7 +257,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-12">
             {loading ? (
               Array(8).fill(0).map((_, i) => (
                 <div key={i} className="animate-pulse">

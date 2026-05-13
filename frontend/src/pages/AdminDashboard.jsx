@@ -103,12 +103,15 @@ const AdminDashboard = () => {
       exit={{ opacity: 0 }}
       className="space-y-12"
     >
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight mb-2">Management Console</h1>
-          <p className="text-neutral-500">Overview of your business performance.</p>
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">Management Console</h1>
+          <p className="text-neutral-500 text-sm md:text-base">Overview of your business performance.</p>
         </div>
-        <Button onClick={() => navigate('/admin/add-product')} className="flex items-center space-x-2">
+        <Button 
+          onClick={() => navigate('/admin/add-product')} 
+          className="flex items-center space-x-2 whitespace-nowrap shrink-0"
+        >
           <Plus size={18} />
           <span>Add Product</span>
         </Button>

@@ -59,10 +59,10 @@ const AdminProducts = () => {
 
   return (
     <div className="space-y-12">
-      <div className="flex flex-wrap justify-between items-end gap-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight mb-2">Product Catalog</h1>
-          <p className="text-neutral-500">Manage your inventory and product details.</p>
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">Product Catalog</h1>
+          <p className="text-neutral-500 text-sm md:text-base">Manage your inventory and product details.</p>
         </div>
         <Button onClick={() => navigate('/admin/add-product')} className="flex items-center space-x-2">
           <Plus size={18} />

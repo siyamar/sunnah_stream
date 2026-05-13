@@ -31,12 +31,21 @@ const PageLoader = () => (
   </div>
 );
 
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
+
 function App() {
   const location = useLocation();
   const isAdminPath = location.pathname.startsWith('/admin');
 
   return (
     <CartProvider>
+      <ScrollToTop />
       <div className="flex flex-col min-h-screen bg-[#FDFDFD]">
         {!isAdminPath && <Navbar />}
         <main className="flex-grow">

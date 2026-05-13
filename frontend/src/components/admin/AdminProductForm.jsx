@@ -18,7 +18,9 @@ const AdminProductForm = ({ mode = 'add' }) => {
     image: '',
     category: '',
     stock: '',
-    isFeatured: false
+    isFeatured: false,
+    sizes: [],
+    colors: []
   });
 
   useEffect(() => {
@@ -34,7 +36,9 @@ const AdminProductForm = ({ mode = 'add' }) => {
             image: data.image || '',
             category: data.category || '',
             stock: data.stock || '',
-            isFeatured: data.isFeatured || false
+            isFeatured: data.isFeatured || false,
+            sizes: data.sizes || [],
+            colors: data.colors || []
           });
         } catch (err) {
           console.error('Error fetching product', err);
@@ -207,6 +211,35 @@ const AdminProductForm = ({ mode = 'add' }) => {
               onChange={(e) => setFormData({...formData, isFeatured: e.target.checked})}
             />
             <label htmlFor="isFeatured" className="text-sm font-bold text-neutral-600 cursor-pointer">Featured Product</label>
+          </div>
+        </div>
+
+        {/* Sizes and Colors */}
+        <div className="card-premium p-8 space-y-6 md:col-span-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-widest text-neutral-400">Available Sizes (Comma separated)</label>
+              <input 
+                type="text" 
+                className="input-premium" 
+                placeholder="e.g. S, M, L, XL"
+                value={formData.sizes?.join(', ') || ''}
+                onChange={(e) => setFormData({...formData, sizes: e.target.value.split(',').map(s => s.trim()).filter(s => s !== '')})}
+              />
+              <p className="text-[10px] text-neutral-400">Example: S, M, L or 40, 41, 42</p>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-widest text-neutral-400">Available Colors (Comma separated)</label>
+              <input 
+                type="text" 
+                className="input-premium" 
+                placeholder="e.g. Black, White, Red"
+                value={formData.colors?.join(', ') || ''}
+                onChange={(e) => setFormData({...formData, colors: e.target.value.split(',').map(c => c.trim()).filter(c => c !== '')})}
+              />
+              <p className="text-[10px] text-neutral-400">Example: Black, White, Navy</p>
+            </div>
           </div>
         </div>
 

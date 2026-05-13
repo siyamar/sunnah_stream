@@ -11,18 +11,19 @@ import {
   LogOut,
   ChevronRight,
   User as UserIcon,
-  BarChart3
+  BarChart3,
+  X
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Logo from '../ui/Logo';
 
-const AdminSidebar = () => {
+const AdminSidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   const menuItems = [
-    { name: 'Home', path: '/admin', icon: <LayoutDashboard size={20} /> },
+    { name: 'Dashboard', path: '/admin', icon: <LayoutDashboard size={20} /> },
     { name: 'Orders', path: '/admin/orders', icon: <ShoppingCart size={20} /> },
     { name: 'Products', path: '/admin/products', icon: <Package size={20} /> },
     { name: 'Inventory', path: '/admin/inventory', icon: <PlusCircle size={20} /> },
@@ -39,21 +40,30 @@ const AdminSidebar = () => {
     navigate('/login');
   };
 
-  return (
-    <div className="h-screen w-72 bg-white border-r border-neutral-100 flex flex-col sticky top-0">
-      <div className="p-8">
-        <Link to="/admin">
+  const sidebarVariants = {
+    open: { x: 0, opacity: 1 },
+    closed: { x: '-100%', opacity: 0 }
+  };
+
+  const SidebarContent = () => (
+    <div className="h-full w-full bg-white border-r border-neutral-100 flex flex-col">
+      <div className="p-8 flex justify-between items-center">
+        <Link to="/admin" onClick={onClose}>
           <Logo />
         </Link>
+        <button onClick={onClose} className="lg:hidden p-2 hover:bg-neutral-100 rounded-full">
+          <X size={20} />
+        </button>
       </div>
 
-      <nav className="flex-grow px-4 space-y-2 py-4">
+      <nav className="flex-grow px-4 space-y-1.5 py-4 overflow-y-auto">
         {menuItems.map((item) => {
           const isActive = location.pathname === item.path;
           return (
             <Link
               key={item.name}
               to={item.path}
+              onClick={onClose}
               className={`flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-300 group ${
                 isActive 
                   ? 'bg-black text-white shadow-lg shadow-black/10' 
@@ -96,6 +106,40 @@ const AdminSidebar = () => {
         </button>
       </div>
     </div>
+  );
+
+  return (
+    <>
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:flex h-screen w-72 flex-col sticky top-0">
+        <SidebarContent />
+      </div>
+
+      {/* Mobile Drawer */}
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={onClose}
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] lg:hidden"
+            />
+            <motion.div
+              initial="closed"
+              animate="open"
+              exit="closed"
+              variants={sidebarVariants}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed inset-y-0 left-0 w-[280px] z-[70] lg:hidden"
+            >
+              <SidebarContent />
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
