@@ -121,13 +121,14 @@ const AdminInvoices = () => {
                           <Eye size={18} />
                         </button>
                         <button 
+                          onClick={() => navigate(`/admin/invoices/${order._id}`)}
                           className="p-2 hover:bg-black hover:text-white rounded-xl transition-all duration-300"
                           title="Print Invoice"
-                          onClick={() => window.print()}
                         >
                           <Printer size={18} />
                         </button>
                         <button 
+                          onClick={() => navigate(`/admin/invoices/${order._id}`)}
                           className="p-2 hover:bg-black hover:text-white rounded-xl transition-all duration-300"
                           title="Download PDF"
                         >

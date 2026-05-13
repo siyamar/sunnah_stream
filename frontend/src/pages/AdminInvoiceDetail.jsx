@@ -6,6 +6,9 @@ import { API_BASE_URL } from '../config';
 import Button from '../components/ui/Button';
 import Logo from '../components/ui/Logo';
 
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
+
 const AdminInvoiceDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -52,6 +55,38 @@ const AdminInvoiceDetail = () => {
     window.print();
   };
 
+  const handleDownloadPDF = async () => {
+    console.log('PDF generation started...');
+    const element = document.getElementById('printable-invoice');
+    if (!element) {
+      console.error('Invoice element not found');
+      return;
+    }
+
+    try {
+      // Use higher scale for better quality
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        logging: true
+      });
+      
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`invoice-${order.orderNumber || 'detail'}.pdf`);
+      console.log('PDF generation successful');
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      alert('Could not generate PDF. Please try using the Print button and "Save as PDF" instead.');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
@@ -71,6 +106,32 @@ const AdminInvoiceDetail = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-20">
+      <style>{`
+        @media print {
+          /* Hide everything except the invoiceRef element */
+          body * {
+            visibility: hidden;
+          }
+          #printable-invoice, #printable-invoice * {
+            visibility: visible;
+          }
+          #printable-invoice {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+          }
+          /* Hide elements explicitly with print:hidden */
+          .print\\:hidden {
+            display: none !important;
+          }
+        }
+      `}</style>
+
       {/* Actions Header - Hidden during print */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-4 print:hidden">
         <button 
@@ -85,7 +146,7 @@ const AdminInvoiceDetail = () => {
             <Printer size={18} />
             <span>Print Invoice</span>
           </Button>
-          <Button className="flex items-center space-x-2">
+          <Button onClick={handleDownloadPDF} className="flex items-center space-x-2">
             <Download size={18} />
             <span>Download PDF</span>
           </Button>
@@ -97,6 +158,7 @@ const AdminInvoiceDetail = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         ref={invoiceRef}
+        id="printable-invoice"
         className="bg-white border border-neutral-100 shadow-2xl rounded-3xl p-12 md:p-16 print:shadow-none print:border-none print:p-0"
       >
         {/* Invoice Header */}
