@@ -35,7 +35,7 @@ const Shop = () => {
           <h1 className="text-4xl font-bold tracking-tight mb-4">Shop All</h1>
           <p className="text-neutral-500">Discover our complete collection of essentials.</p>
         </div>
-        
+
         <div className="flex space-x-4 w-full md:w-auto overflow-x-auto pb-4 md:pb-0">
           {['All', 'Apparel', 'Accessories', 'Bags', 'Footwear'].map((cat) => (
             <button key={cat} className="px-6 py-2 rounded-full border border-neutral-100 text-sm font-medium hover:border-black transition-colors whitespace-nowrap">

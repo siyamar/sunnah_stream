@@ -52,16 +52,16 @@ const LoadingDots = () => {
 
 const Hero = () => {
   return (
-    <section className="relative h-[90vh] flex items-center overflow-hidden bg-[#072a35]">
+    <section className="relative min-h-[50vh] md:h-[90vh] py-12 md:py-0 flex items-center overflow-hidden bg-[#072a35]">
       {/* Professional Parallax Background */}
-      <motion.div 
+      <motion.div
         initial={{ scale: 1.05 }}
         animate={{ scale: 1 }}
         transition={{ duration: 15, repeat: Infinity, repeatType: "reverse" }}
         className="absolute inset-0 z-0"
       >
-        <img 
-          src={bannerImg} 
+        <img
+          src={bannerImg}
           className="w-full h-full object-cover opacity-30"
           alt="Sunnah Stream"
         />
@@ -73,28 +73,28 @@ const Hero = () => {
         {[...Array(10)].map((_, i) => (
           <motion.div
             key={i}
-            initial={{ 
-              x: Math.random() * 100 + '%', 
-              y: Math.random() * 100 + '%', 
+            initial={{
+              x: Math.random() * 100 + '%',
+              y: Math.random() * 100 + '%',
               opacity: 0
             }}
-            animate={{ 
+            animate={{
               y: [null, '-30px', '30px'],
               opacity: [0.05, 0.15, 0.05],
             }}
-            transition={{ 
-              duration: 5 + Math.random() * 5, 
-              repeat: Infinity, 
-              ease: "easeInOut" 
+            transition={{
+              duration: 5 + Math.random() * 5,
+              repeat: Infinity,
+              ease: "easeInOut"
             }}
             className="absolute w-[2px] h-[2px] bg-white rounded-full"
           />
         ))}
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10 w-full grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10 w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-20 items-center">
         {/* Left Side: Main Brand & Action (SWAPPED TO LEFT) */}
-        <div className="text-center md:text-left">
+        <div className="text-center md:text-left hidden md:block">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -110,10 +110,10 @@ const Hero = () => {
               "Sustainable Solutions for Modern Tradition."
             </p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
-              <button 
+              <button
                 onClick={() => {
                   const el = document.getElementById('collections');
-                  if(el) el.scrollIntoView({ behavior: 'smooth' });
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
               >
                 <Button className="bg-brand-teal hover:bg-brand-teal/90 text-white px-12 py-5 text-lg rounded-full w-full">
@@ -123,7 +123,7 @@ const Hero = () => {
               <button
                 onClick={() => {
                   const el = document.getElementById('support');
-                  if(el) el.scrollIntoView({ behavior: 'smooth' });
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
               >
                 <Button variant="ghost" className="text-white hover:bg-white/10 px-12 py-5 text-lg rounded-full border border-white/20 backdrop-blur-sm w-full">
@@ -232,24 +232,23 @@ const Home = () => {
       </div>
 
       {/* Collections Section */}
-      <section id="collections" className="py-32 bg-white">
+      <section id="collections" className="py-12 md:py-32 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-8">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-20 gap-8">
             <div>
               <h2 className="text-4xl font-bold tracking-tight mb-4">Shop All</h2>
               <p className="text-neutral-500">Discover our complete collection of essentials.</p>
             </div>
-            
+
             <div className="flex space-x-2 w-full md:w-auto overflow-x-auto pb-4 md:pb-0 scrollbar-hide">
               {categories.map((cat) => (
-                <button 
-                  key={cat} 
+                <button
+                  key={cat}
                   onClick={() => setActiveCategory(cat)}
-                  className={`px-6 py-2 rounded-full border text-sm font-medium transition-all duration-300 whitespace-nowrap ${
-                    activeCategory === cat 
-                    ? 'bg-black text-white border-black' 
-                    : 'border-neutral-100 text-neutral-500 hover:border-black hover:text-black'
-                  }`}
+                  className={`px-6 py-2 rounded-full border text-sm font-medium transition-all duration-300 whitespace-nowrap ${activeCategory === cat
+                      ? 'bg-black text-white border-black'
+                      : 'border-neutral-100 text-neutral-500 hover:border-black hover:text-black'
+                    }`}
                 >
                   {cat}
                 </button>
@@ -324,7 +323,7 @@ const Home = () => {
             >
               <div className="aspect-square bg-gradient-to-br from-brand-teal/20 to-transparent rounded-3xl p-1">
                 <div className="w-full h-full rounded-[calc(1.5rem-1px)] bg-[#072a35] flex items-center justify-center p-12">
-                   <img src={logoImg} alt="Sunnah Stream" className="w-full opacity-50 grayscale contrast-125" />
+                  <img src={logoImg} alt="Sunnah Stream" className="w-full opacity-50 grayscale contrast-125" />
                 </div>
               </div>
               {/* Floating Badge */}
@@ -346,23 +345,23 @@ const Home = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { 
-                title: 'Customer Support', 
-                desc: 'Call: 01882799557, 01862192937. Reach out via phone or email.', 
+              {
+                title: 'Customer Support',
+                desc: 'Call: 01882799557, 01862192937. Reach out via phone or email.',
                 icon: '✉️',
                 action: 'Email Us',
                 link: 'mailto:sunnahstreamst@gmail.com'
               },
-              { 
-                title: 'Shipping & Returns', 
-                desc: 'Track your order or learn about our easy 30-day return policy.', 
+              {
+                title: 'Shipping & Returns',
+                desc: 'Track your order or learn about our easy 30-day return policy.',
                 icon: '📦',
                 action: 'Learn More',
                 link: '#'
               },
-              { 
-                title: 'Our Community', 
-                desc: 'Join our newsletter for exclusive updates and mindful living tips.', 
+              {
+                title: 'Our Community',
+                desc: 'Join our newsletter for exclusive updates and mindful living tips.',
                 icon: '🤝',
                 action: 'Join Now',
                 link: '#'

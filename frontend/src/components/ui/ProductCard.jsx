@@ -23,19 +23,19 @@ const ProductCard = ({ product }) => {
           />
         </Link>
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300 pointer-events-none" />
-        
+
         {/* Cart Button: Always visible on mobile, hover on desktop */}
-        <button 
+        <button
           onClick={(e) => {
             e.preventDefault();
             addToCart(product);
-          }} 
+          }}
           className="absolute bottom-3 right-3 md:bottom-4 md:right-4 bg-white p-2.5 md:p-3 rounded-full shadow-lg md:opacity-0 md:translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-black hover:text-white z-10"
         >
           <ShoppingCart size={18} className="md:w-5 md:h-5" />
         </button>
       </div>
-      
+
       <div className="mt-4 md:mt-6 space-y-1">
         <div className="flex justify-between items-start">
           <Link to={`/product/${product._id}`} className="text-sm font-bold hover:text-brand-teal transition-colors truncate pr-2">

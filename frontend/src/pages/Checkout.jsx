@@ -25,7 +25,7 @@ const Checkout = () => {
 
     try {
       const token = localStorage.getItem('token');
-      
+
       const itemsForBackend = cartItems.map(item => ({
         product: item.product._id,
         quantity: item.quantity,
@@ -63,7 +63,7 @@ const Checkout = () => {
   if (orderData) {
     return (
       <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className="bg-white rounded-3xl p-10 max-w-md w-full text-center shadow-2xl"
@@ -84,8 +84,8 @@ const Checkout = () => {
           </p>
           <div className="space-y-4">
             <Button onClick={() => navigate('/shop')} className="w-full">Continue Shopping</Button>
-            <button 
-              onClick={() => navigate('/track-order')} 
+            <button
+              onClick={() => navigate('/track-order')}
               className="text-sm font-bold text-neutral-400 hover:text-black transition-colors"
             >
               Track Order Status
@@ -146,13 +146,13 @@ const Checkout = () => {
                 </div>
               ))}
             </div>
-            
+
             <div className="border-t border-neutral-100 pt-8 space-y-4">
-               <div className="flex justify-between text-neutral-400 text-sm">
+              <div className="flex justify-between text-neutral-400 text-sm">
                 <span>Subtotal</span>
                 <span>${cartTotal.toFixed(2)}</span>
               </div>
-               <div className="flex justify-between text-neutral-400 text-sm">
+              <div className="flex justify-between text-neutral-400 text-sm">
                 <span>Shipping</span>
                 <span className="text-green-500 font-bold uppercase tracking-widest text-[10px]">Free</span>
               </div>
@@ -170,47 +170,47 @@ const Checkout = () => {
             <form onSubmit={handleSubmit} className="space-y-8">
               <div className="space-y-3">
                 <label className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400 ml-1">Full Name</label>
-                <input 
+                <input
                   required
                   placeholder="Enter your name"
-                  className="input-premium w-full !bg-neutral-50 !rounded-2xl" 
+                  className="input-premium w-full !bg-neutral-50 !rounded-2xl"
                   value={shipping.customerName}
-                  onChange={e => setShipping({...shipping, customerName: e.target.value})}
+                  onChange={e => setShipping({ ...shipping, customerName: e.target.value })}
                 />
               </div>
-              
+
               <div className="space-y-3">
                 <label className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400 ml-1">Mobile Number</label>
-                <input 
+                <input
                   required
                   type="tel"
                   placeholder="e.g. +880 1XXX-XXXXXX"
-                  className="input-premium w-full !bg-neutral-50 !rounded-2xl" 
+                  className="input-premium w-full !bg-neutral-50 !rounded-2xl"
                   value={shipping.phoneNumber}
-                  onChange={e => setShipping({...shipping, phoneNumber: e.target.value})}
+                  onChange={e => setShipping({ ...shipping, phoneNumber: e.target.value })}
                 />
               </div>
 
               <div className="space-y-3">
                 <label className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400 ml-1">Full Address</label>
-                <textarea 
+                <textarea
                   required
                   rows="3"
                   placeholder="Street name, house number, area..."
-                  className="input-premium w-full !bg-neutral-50 !rounded-2xl resize-none py-4" 
+                  className="input-premium w-full !bg-neutral-50 !rounded-2xl resize-none py-4"
                   value={shipping.address}
-                  onChange={e => setShipping({...shipping, address: e.target.value})}
+                  onChange={e => setShipping({ ...shipping, address: e.target.value })}
                 />
               </div>
 
               <div className="space-y-3">
                 <label className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400 ml-1">Additional Details (Optional)</label>
-                <textarea 
+                <textarea
                   rows="2"
                   placeholder="Notes for delivery person, building name, etc."
-                  className="input-premium w-full !bg-neutral-50 !rounded-2xl resize-none py-4" 
+                  className="input-premium w-full !bg-neutral-50 !rounded-2xl resize-none py-4"
                   value={shipping.details}
-                  onChange={e => setShipping({...shipping, details: e.target.value})}
+                  onChange={e => setShipping({ ...shipping, details: e.target.value })}
                 />
               </div>
 

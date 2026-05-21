@@ -11,21 +11,36 @@ const TrackOrder = () => {
 
   const handleTrack = async (e) => {
     e.preventDefault();
+    
+    // Clean order number: remove any '#' symbols, spaces, and make uppercase
+    let cleanedNum = orderNumber.replace(/#/g, '').replace(/\s+/g, '').trim().toUpperCase();
+
+    if (!cleanedNum) {
+      setError('Please enter a valid order number.');
+      return;
+    }
+
     setLoading(true);
     setError('');
     setOrder(null);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/orders/track/${orderNumber}`);
-      const data = await response.json();
+      const response = await fetch(`${API_BASE_URL}/api/orders/track/${cleanedNum}`);
+      
+      let data = null;
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      }
 
-      if (response.ok) {
+      if (response.ok && data) {
         setOrder(data);
       } else {
-        setError(data.message || 'Order not found. Please check the order number.');
+        setError(data?.message || 'Order not found. Please double check the order number (e.g. SS-XXXXX). Do not include any "#" prefix.');
       }
     } catch (err) {
-      setError('Network error. Please try again.');
+      console.error(err);
+      setError('Order not found or invalid format. Please make sure the order number is correct (e.g., SS-XXXXX) and does not contain "#" or spaces.');
     } finally {
       setLoading(false);
     }
@@ -54,14 +69,19 @@ const TrackOrder = () => {
 
       <div className="card-premium p-8 md:p-12 mb-12">
         <form onSubmit={handleTrack} className="flex flex-col md:flex-row gap-4">
-          <input
-            required
-            placeholder="Enter Order Number (e.g. SS-XXXXX)"
-            className="input-premium flex-grow !bg-neutral-50 !rounded-2xl"
-            value={orderNumber}
-            onChange={(e) => setOrderNumber(e.target.value.toUpperCase())}
-          />
-          <Button type="submit" disabled={loading} className="px-10 rounded-2xl">
+          <div className="flex-grow">
+            <input
+              required
+              placeholder="Enter Order Number (e.g. SS-XXXXX)"
+              className="input-premium w-full !bg-neutral-50 !rounded-2xl"
+              value={orderNumber}
+              onChange={(e) => setOrderNumber(e.target.value.replace(/#/g, '').toUpperCase())}
+            />
+            <p className="text-[11px] text-neutral-400 mt-2 ml-1">
+              * Note: Please enter the order number directly (e.g., <strong>SS-XXXXX</strong>). Do not include a hash symbol (#).
+            </p>
+          </div>
+          <Button type="submit" disabled={loading} className="px-10 rounded-2xl h-[50px] md:h-auto">
             {loading ? 'Searching...' : 'Track Now'}
           </Button>
         </form>
